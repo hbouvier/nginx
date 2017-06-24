@@ -20,7 +20,14 @@ function delay_reload() {
   printf "$!" > "${PID_FILE}"
 }
 
-inotifywait -m -e modify /etc/nginx/conf.d |
+mkdir -p /etc/nginx/conf.d /etc/nginx/passwords /tmp/nginx/conf.d /tmp/nginx/passwords
+rsync -avq --copy-links /etc/nginx/conf.d/ /tmp/nginx/conf.d/
+rsync -avq --copy-links /etc/nginx/passwords/ /tmp/nginx/passwords/
+
+(while [ true ] ; do rsync -avq --copy-links /etc/nginx/conf.d/  /tmp/nginx/conf.d/ ; rsync -avq --copy-links /etc/nginx/passwords/ /tmp/nginx/passwords/ ; sleep 60 ; done) &
+
+
+inotifywait -m -e modify /tmp/nginx/conf.d /tmp/nginx/passwords |
   while read path _ filename ; do
     printf "$(date "+%Y/%m/%d %H:%M:%S") [debug] NGINX queued reload in ${DELAY} seconds due to changes in ${path}${filename}\n"
     delay_reload "${path}${filename}"

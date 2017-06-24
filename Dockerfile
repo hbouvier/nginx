@@ -3,7 +3,7 @@ FROM nginx:1.12-alpine
 ENV VERSION=1.0.4
 
 RUN apk update && \
-    apk add inotify-tools && \
+    apk add inotify-tools rsync && \
     rm -rf /var/cache/apk/*
 
 ADD https://github.com/hbouvier/watchgod/releases/download/v${VERSION}/watchgod.v${VERSION}.zip /tmp/
