@@ -1,8 +1,9 @@
+VERSION:=1.13-alpine-001
+
 all: build push
 
-
 build:
-	docker build -t hbouvier/nginx:1.12-alpine-003 .
+	docker build -t hbouvier/nginx:${VERSION} .
 
 push:
-	docker push hbouvier/nginx:1.12-alpine-003
+	docker push hbouvier/nginx:${VERSION}
